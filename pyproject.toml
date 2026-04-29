@@ -1,0 +1,14 @@
+[project]
+name = "notesy"
+version = "0.1.0"
+description = "tiny notes app"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+    "jinja2>=3.1",
+    "python-multipart>=0.0.12",
+    "strawberry-graphql[fastapi]>=0.245",
+    "anthropic>=0.40",
+    "itsdangerous>=2.2",
+]
