@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}notesy{% endblock %}</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <script>
+    window.__notesy = {
+      backendUrl: "{{ backend_url }}",
+      backendKey: "{{ backend_key }}"
+    };
+  </script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="/" class="brand">notesy</a>
+    <nav>
+      <a href="/dashboard">notes</a>
+      <a href="/login">sign in</a>
+    </nav>
+  </header>
+  <main>{% block content %}{% endblock %}</main>
+  <footer><small>notesy</small></footer>
+  <script src="/static/app.js"></script>
+</body>
+</html>

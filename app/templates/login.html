@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}sign in{% endblock %}
+{% block content %}
+<section class="auth">
+  <h2>sign in</h2>
+  <form method="post" action="/api/login">
+    <label>email <input type="email" name="email" required></label>
+    <label>password <input type="password" name="password" required></label>
+    <button type="submit">continue</button>
+  </form>
+  <p><small>demo only</small></p>
+</section>
+{% endblock %}

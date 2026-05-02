@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}notes{% endblock %}
+{% block content %}
+<section class="dashboard">
+  <h2>your notes</h2>
+  <ul id="notes-list"><li class="muted">loading…</li></ul>
+  <form id="new-note">
+    <input name="title" placeholder="title" required maxlength="200">
+    <textarea name="body" placeholder="write…" rows="3" maxlength="10000"></textarea>
+    <button type="submit">save</button>
+  </form>
+</section>
+{% endblock %}
