@@ -1,8 +1,10 @@
 import os
 
 from fastapi import APIRouter, Request
-from fastapi.responses import HTMLResponse, PlainTextResponse
+from fastapi.responses import HTMLResponse, PlainTextResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
+
+from app.routers.auth import current_user
 
 router = APIRouter()
 templates = Jinja2Templates(directory=os.path.join(os.path.dirname(__file__), "..", "templates"))
@@ -27,6 +29,8 @@ async def login(request: Request):
 
 @router.get("/dashboard", response_class=HTMLResponse)
 async def dashboard(request: Request):
+    if not current_user(request):
+        return RedirectResponse("/login", status_code=303)
     return templates.TemplateResponse(request, "dashboard.html", _ctx())
 
 

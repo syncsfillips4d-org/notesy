@@ -9,7 +9,14 @@ from app.routers.auth import current_user
 
 router = APIRouter(prefix="/api")
 
-DEMO_USER_EMAIL = os.environ.get("DEMO_USER_EMAIL", "demo@example.com")
+OWNER_EMAIL = os.environ.get("OWNER_EMAIL", "me@example.com")
+
+
+def _require_user(request: Request) -> str:
+    user = current_user(request)
+    if not user:
+        raise HTTPException(status_code=401, detail="login required")
+    return user
 
 
 class NoteIn(BaseModel):
@@ -24,9 +31,9 @@ class Note(NoteIn):
 
 _id_seq = count(start=4)
 _notes: list[Note] = [
-    Note(id=1, title="welcome", body="first note. press n for new.", author=DEMO_USER_EMAIL),
-    Note(id=2, title="groceries", body="milk, eggs, bread", author=DEMO_USER_EMAIL),
-    Note(id=3, title="todo", body=f"ping {DEMO_USER_EMAIL} for beta access", author=DEMO_USER_EMAIL),
+    Note(id=1, title="welcome", body="first note. press n for new.", author=OWNER_EMAIL),
+    Note(id=2, title="groceries", body="milk, eggs, bread", author=OWNER_EMAIL),
+    Note(id=3, title="todo", body=f"reach me at {OWNER_EMAIL}", author=OWNER_EMAIL),
 ]
 
 
@@ -45,14 +52,15 @@ async def get_note(note_id: int) -> Note:
 
 @router.post("/notes", status_code=201)
 async def create_note(payload: NoteIn, request: Request) -> Note:
-    user = current_user(request) or "anon"
+    user = _require_user(request)
     n = Note(id=next(_id_seq), title=payload.title, body=payload.body, author=user)
     _notes.append(n)
     return n
 
 
 @router.delete("/notes/{note_id}", status_code=204)
-async def delete_note(note_id: int) -> None:
+async def delete_note(note_id: int, request: Request) -> None:
+    _require_user(request)
     for i, n in enumerate(_notes):
         if n.id == note_id:
             _notes.pop(i)
