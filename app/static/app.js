@@ -19,7 +19,6 @@ async function deleteNote(id) {
 }
 
 async function notifyBackend(note) {
-  // mirror to internal backend (legacy — should move server-side)
   if (!cfg.backendUrl || !cfg.backendKey) return;
   try {
     await fetch(cfg.backendUrl + "/notes", {

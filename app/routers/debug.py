@@ -1,4 +1,3 @@
-"""Old debug endpoint. TODO: remove before launch."""
 import os
 
 from fastapi import APIRouter

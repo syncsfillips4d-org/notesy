@@ -1,13 +1,13 @@
 # notesy
 
-A tiny notes app. Markdown, GraphQL, deploys to fly.
+Tiny notes app. FastAPI + Strawberry GraphQL. Deploys to fly.
 
 ## Run locally
 
 ```bash
 cp .env.example .env
 uv sync
-uv run uvicorn app.main:app --reload
+uv run uvicorn app.main:app --env-file .env --reload
 ```
 
 Open http://localhost:8000.

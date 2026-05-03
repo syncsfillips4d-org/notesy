@@ -9,6 +9,13 @@ from app.routers import auth, debug, graphql_router, notes_api, pages, summarize
 
 STATIC_DIR = os.path.join(os.path.dirname(__file__), "static")
 
+# Fail closed when running on Fly without proper config.
+if os.environ.get("FLY_APP_NAME"):
+    _required = ["BACKEND_URL", "BACKEND_KEY", "SESSION_SECRET"]
+    _missing = [k for k in _required if not os.environ.get(k)]
+    if _missing:
+        raise SystemExit(f"missing required env vars: {', '.join(_missing)}")
+
 app = FastAPI(
     title="notesy",
     docs_url=None,
