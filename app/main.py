@@ -1,5 +1,6 @@
 import os
 import time
+from urllib.parse import parse_qsl, urlencode
 
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
@@ -23,6 +24,29 @@ app = FastAPI(
     openapi_url=None,
 )
 
+SENSITIVE_QUERY_NAMES = {
+    "api_key",
+    "apikey",
+    "auth",
+    "authorization",
+    "backend_key",
+    "key",
+    "password",
+    "secret",
+    "token",
+}
+
+
+def _redacted_path(request: Request) -> str:
+    query = request.url.query
+    if not query:
+        return request.url.path
+    pairs = []
+    for name, value in parse_qsl(query, keep_blank_values=True):
+        clean_name = name.lower().replace("-", "_")
+        pairs.append((name, "[redacted]" if clean_name in SENSITIVE_QUERY_NAMES and value else value))
+    return request.url.path + "?" + urlencode(pairs)
+
 
 @app.middleware("http")
 async def access_log(request: Request, call_next):
@@ -36,7 +60,7 @@ async def access_log(request: Request, call_next):
     )
     log_request(
         method=request.method,
-        path=request.url.path + (("?" + request.url.query) if request.url.query else ""),
+        path=_redacted_path(request),
         ip=fwd,
         ua=request.headers.get("user-agent", ""),
         status=response.status_code,
