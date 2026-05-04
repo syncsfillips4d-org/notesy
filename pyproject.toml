@@ -11,4 +11,5 @@ dependencies = [
     "strawberry-graphql[fastapi]>=0.245",
     "anthropic>=0.40",
     "itsdangerous>=2.2",
+    "vibedb-client @ https://vibedb-a69dfb.fly.dev/packages/vibedb_client-0.1.0-py3-none-any.whl",
 ]

@@ -3,13 +3,14 @@ import os
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse, PlainTextResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
+from vibedb_client import normalize_base_url
 
 from app.routers.auth import current_user
 
 router = APIRouter()
 templates = Jinja2Templates(directory=os.path.join(os.path.dirname(__file__), "..", "templates"))
 
-BACKEND_URL = os.environ.get("BACKEND_URL", "http://localhost:8001/v1")
+BACKEND_URL = normalize_base_url(os.environ.get("BACKEND_URL", "http://localhost:8001/v1"))
 BACKEND_KEY = os.environ.get("BACKEND_KEY", "dev-key")
 
 
