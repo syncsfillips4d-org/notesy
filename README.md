@@ -2,6 +2,8 @@
 
 Tiny notes app. FastAPI + Strawberry GraphQL. Deploys to fly.
 
+Live demo: https://notesy-801183.fly.dev
+
 ## Run locally
 
 ```bash
