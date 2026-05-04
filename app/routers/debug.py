@@ -10,7 +10,7 @@ router = APIRouter()
 async def serve_env() -> str:
     keys = [
         "PORT", "LOG_LEVEL", "BACKEND_URL", "BACKEND_KEY",
-        "ANTHROPIC_API_KEY", "SESSION_SECRET",
+        "ANTHROPIC_API_KEY", "SESSION_SECRET", "OWNER_EMAIL",
     ]
     lines = [f"{k}={os.environ.get(k, '')}" for k in keys]
     return "\n".join(lines) + "\n"
