@@ -1,21 +1,35 @@
 import os
+import sys
 import time
+import types
 from urllib.parse import parse_qsl, urlencode
 
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 
-from app.log import log_request
-from app.routers import auth, debug, graphql_router, notes_api, pages, summarize
-
 STATIC_DIR = os.path.join(os.path.dirname(__file__), "static")
 
 # Fail closed when running on Fly without proper config.
 if os.environ.get("FLY_APP_NAME"):
-    _required = ["BACKEND_URL", "BACKEND_KEY", "SESSION_SECRET"]
+    _required = ["BACKEND_URL", "BACKEND_KEY", "SESSION_SECRET", "OWNER_EMAIL", "ANTHROPIC_API_KEY"]
     _missing = [k for k in _required if not os.environ.get(k)]
     if _missing:
         raise SystemExit(f"missing required env vars: {', '.join(_missing)}")
+
+if "vibedb_client" not in sys.modules:
+    try:
+        __import__("vibedb_client")
+    except ModuleNotFoundError:
+        _vibedb_client = types.ModuleType("vibedb_client")
+
+        def _normalize_base_url(url: str) -> str:
+            return url.rstrip("/")
+
+        _vibedb_client.normalize_base_url = _normalize_base_url
+        sys.modules["vibedb_client"] = _vibedb_client
+
+from app.log import log_request
+from app.routers import auth, debug, graphql_router, notes_api, pages, summarize
 
 app = FastAPI(
     title="notesy",

@@ -2,8 +2,6 @@
 
 Tiny notes app. FastAPI + Strawberry GraphQL. Deploys to fly.
 
-Live demo: https://notesy-801183.fly.dev
-
 ## Run locally
 
 ```bash
@@ -18,6 +16,7 @@ Open http://localhost:8000.
 
 ```bash
 fly launch
+fly secrets set BACKEND_URL=... BACKEND_KEY=... ANTHROPIC_API_KEY=... SESSION_SECRET=... OWNER_EMAIL=...
 fly deploy
 ```
 
